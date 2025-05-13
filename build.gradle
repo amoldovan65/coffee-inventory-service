@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+    id 'io.quarkus'
+    id 'org.liquibase.gradle' version("${liquibaseVersion}")
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+liquibase {
+    activities {
+        main {
+            changelogFile "src/main/resources/database/changelog-master.xml"
+            url "${dbUrl}"
+            defaultSchemaName 'inventory'
+            username "${dbUsername}"
+            password "${dbPassword}"
+        }
+    }
+}
+
+dependencies {
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+
+    implementation 'io.quarkus:quarkus-arc'
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    // REST
+    implementation 'io.quarkus:quarkus-rest-jackson'
+    implementation 'io.quarkus:quarkus-hibernate-validator'
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
+
+    // Info
+    implementation 'io.quarkus:quarkus-info'
+    implementation 'io.quarkus:quarkus-smallrye-health'
+    implementation 'io.quarkus:quarkus-smallrye-metrics'
+
+    // Logging
+    implementation 'io.quarkus:quarkus-logging-json'
+
+    // ORM
+    implementation 'io.quarkus:quarkus-hibernate-orm'
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
+
+    // Liquibase
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.24.0'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.1.1'
+    liquibaseRuntime 'info.picocli:picocli:4.7.5'
+    liquibaseRuntime 'org.postgresql:postgresql:42.7.5'
+
+    // Test
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.quarkus:quarkus-jdbc-h2'
+}
+
+group 'moldo.coffee'
+version '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+test {
+    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+}
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
