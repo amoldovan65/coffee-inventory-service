@@ -1,5 +1,5 @@
 package moldo.coffee.domain;
 
 public enum OrderStatus {
-    IN_PROGRESS, FULFILLED, CANCELLED;
+    IN_PROGRESS, FULFILLED, CANCELLED
 }

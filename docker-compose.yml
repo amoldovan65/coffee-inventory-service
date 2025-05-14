@@ -1,5 +1,5 @@
 services:
-  beansdb:
+  inventorydb:
     image: postgres:15
     restart: always
     environment:
