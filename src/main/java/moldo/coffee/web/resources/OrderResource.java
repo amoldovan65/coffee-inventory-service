@@ -41,8 +41,9 @@ public class OrderResource {
     }
 
     @GET
-    public List<OrderResult> getOrdersOfClient(@QueryParam("clientId") @NotNull final Integer clientId) {
-        return orderService.getOrdersOfClient(clientId);
+    public List<OrderResult> getOrdersOfClient(@QueryParam("clientId") @NotNull final Integer clientId,
+                                               @QueryParam("status") final OrderStatus status) {
+        return orderService.getOrdersOfClient(clientId, status);
     }
 
 }

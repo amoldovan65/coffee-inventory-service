@@ -87,8 +87,9 @@ public class OrderService {
         orders.forEach(em::remove);
     }
 
-    public List<OrderResult> getOrdersOfClient(final Integer clientId) {
-        final List<Order> orders = orderQueryService.getAllByClientId(clientId);
+    public List<OrderResult> getOrdersOfClient(final Integer clientId, final OrderStatus status) {
+        final List<Order> orders = status == null ? orderQueryService.getAllByClientId(clientId) :
+                orderQueryService.getAllByClientIdAndStatus(clientId, status);
         if (orders.isEmpty()) {
             return List.of();
         }

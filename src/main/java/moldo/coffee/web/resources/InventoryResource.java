@@ -1,12 +1,15 @@
 package moldo.coffee.web.resources;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.ws.rs.*;
 import lombok.RequiredArgsConstructor;
 import moldo.coffee.service.InventoryService;
 import moldo.coffee.web.domain.InventoryCreateRequest;
 import moldo.coffee.web.domain.InventoryEditRequest;
 import moldo.coffee.web.domain.InventoryResult;
+
+import java.util.List;
 
 @Path("")
 @RequiredArgsConstructor
@@ -35,6 +38,11 @@ public class InventoryResource {
     @Path("/{id}")
     public InventoryResult getInventoryForBeans(@PathParam("id") final Integer id) {
         return inventoryService.getInventory(id);
+    }
+
+    @GET
+    public List<InventoryResult> getInventories(@QueryParam("ids") @NotEmpty final List<Integer> ids) {
+        return inventoryService.getInventories(ids);
     }
 
 }

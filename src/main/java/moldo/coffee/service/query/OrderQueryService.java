@@ -31,6 +31,13 @@ public class OrderQueryService {
                 .getResultList();
     }
 
+    public List<Order> getAllByClientIdAndStatus(final Integer clientId, final OrderStatus status) {
+        return em.createNamedQuery(Order.GET_ALL_BY_CLIENT_ID_AND_STATUS, Order.class)
+                .setParameter("clientId", clientId)
+                .setParameter("status", status)
+                .getResultList();
+    }
+
     public List<OrderItem> getItems(final List<Integer> orderIds) {
         return em.createNamedQuery(OrderItem.GET_ALL_BY_ORDER_IDS, OrderItem.class)
                 .setParameter("orderIds", orderIds)

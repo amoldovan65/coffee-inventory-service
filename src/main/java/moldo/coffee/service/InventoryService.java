@@ -92,6 +92,12 @@ public class InventoryService {
                 .orElse(new InventoryResult(0L, 0L));
     }
 
+    public List<InventoryResult> getInventories(final List<Integer> ids) {
+        return inventoryQueryService.getAll(ids, false).stream()
+                .map(inventory -> new InventoryResult(inventory.getQuantity(), inventory.getPrice()))
+                .toList();
+    }
+
     public Map<Integer, Long> getCostsByInventory(final Set<Integer> inventoryIds) {
         final List<Inventory> inventories = inventoryQueryService.getAll(inventoryIds, false);
         return inventories.stream()

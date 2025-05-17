@@ -10,11 +10,13 @@ import lombok.Setter;
 @Entity
 @Table(name = "bean_order")
 @NamedQueries({
-        @NamedQuery(name = Order.GET_ALL_BY_CLIENT_ID, query = "select o from Order o where o.clientId = :clientId")
+        @NamedQuery(name = Order.GET_ALL_BY_CLIENT_ID, query = "select o from Order o where o.clientId = :clientId"),
+        @NamedQuery(name = Order.GET_ALL_BY_CLIENT_ID_AND_STATUS, query = "select o from Order o where o.clientId = :clientId and o.status = :status")
 })
 public class Order {
 
     public static final String GET_ALL_BY_CLIENT_ID = "Order.getAllByClientId";
+    public static final String GET_ALL_BY_CLIENT_ID_AND_STATUS = "Order.getAllByClientIdAndStatus";
 
     @Id
     @Setter(AccessLevel.NONE)
