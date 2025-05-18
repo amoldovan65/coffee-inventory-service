@@ -1,0 +1,49 @@
+{
+  "containerDefinitions": [
+    {
+      "essential": true,
+      "image": "083384386596.dkr.ecr.eu-central-1.amazonaws.com/coffee/inventory:latest",
+      "secrets": [
+        {
+          "name": "DB_URL",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:083384386596:secret:inventory-db:url::"
+        },
+        {
+          "name": "DB_USERNAME",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:083384386596:secret:inventory-db:username::"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:083384386596:secret:inventory-db:password::"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group" : "/ecs/inventory",
+          "awslogs-region": "eu-central-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "name": "inventory",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  ],
+  "cpu": "1024",
+  "executionRoleArn": "arn:aws:iam::083384386596:role/ecsTaskExecutionRole",
+  "family": "inventory",
+  "memory": "2048",
+  "networkMode": "awsvpc",
+  "runtimePlatform": {
+    "operatingSystemFamily": "LINUX"
+  },
+  "requiresCompatibilities": [
+    "FARGATE"
+  ]
+}
