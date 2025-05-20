@@ -35,10 +35,10 @@
       ]
     }
   ],
-  "cpu": "1024",
+  "cpu": "512",
   "executionRoleArn": "arn:aws:iam::083384386596:role/ecsTaskExecutionRole",
   "family": "inventory",
-  "memory": "2048",
+  "memory": "1024",
   "networkMode": "awsvpc",
   "runtimePlatform": {
     "operatingSystemFamily": "LINUX"
