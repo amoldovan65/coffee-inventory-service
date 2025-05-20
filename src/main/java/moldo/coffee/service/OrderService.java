@@ -33,6 +33,7 @@ public class OrderService {
         final Order order = new Order();
         order.setStatus(OrderStatus.IN_PROGRESS);
         order.setClientId(clientId);
+        order.setOrderNumber(UUID.randomUUID());
         em.persist(order);
         em.flush();
 
@@ -88,8 +89,7 @@ public class OrderService {
     }
 
     public List<OrderResult> getOrdersOfClient(final Integer clientId, final OrderStatus status) {
-        final List<Order> orders = status == null ? orderQueryService.getAllByClientId(clientId) :
-                orderQueryService.getAllByClientIdAndStatus(clientId, status);
+        final List<Order> orders = orderQueryService.findAll(clientId, status);
         if (orders.isEmpty()) {
             return List.of();
         }
@@ -108,7 +108,7 @@ public class OrderService {
                     final List<OrderItem> items = itemsByOrder.get(order.getId());
                     final List<ItemResult> itemResults = mapItems(items);
                     final Long cost = costsByOrder.getOrDefault(order.getId(), 0L);
-                    return new OrderResult(order.getStatus(), cost, itemResults);
+                    return new OrderResult(order.getStatus(), order.getOrderNumber(), cost, itemResults);
                 })
                 .toList();
     }

@@ -8,7 +8,8 @@ CREATE TABLE inventory(
 CREATE TABLE bean_order(
     id serial primary key,
     status varchar(20) not null,
-    client_id int not null
+    client_id int not null,
+    order_number uuid not null
 );
 
 CREATE TABLE order_item(

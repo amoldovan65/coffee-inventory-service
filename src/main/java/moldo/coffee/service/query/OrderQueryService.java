@@ -2,6 +2,10 @@ package moldo.coffee.service.query;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +14,7 @@ import moldo.coffee.domain.OrderItem;
 import moldo.coffee.domain.OrderStatus;
 import moldo.coffee.exception.ValidationException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,16 +30,25 @@ public class OrderQueryService {
                 .orElseThrow(() -> new NotFoundException("Order not found"));
     }
 
+    public List<Order> findAll(final Integer clientId, final OrderStatus status) {
+        final CriteriaBuilder builder = em.getCriteriaBuilder();
+        final CriteriaQuery<Order> query = builder.createQuery(Order.class);
+        final Root<Order> root = query.from(Order.class);
+        final List<Predicate> predicates = new ArrayList<>();
+        if (clientId != null) {
+            predicates.add(builder.equal(root.get("clientId"), clientId));
+        }
+        if (status != null) {
+            predicates.add(builder.equal(root.get("status"), status));
+        }
+
+        query.where(predicates.toArray(new Predicate[0]));
+        return em.createQuery(query).getResultList();
+    }
+
     public List<Order> getAllByClientId(final Integer clientId) {
         return em.createNamedQuery(Order.GET_ALL_BY_CLIENT_ID, Order.class)
                 .setParameter("clientId", clientId)
-                .getResultList();
-    }
-
-    public List<Order> getAllByClientIdAndStatus(final Integer clientId, final OrderStatus status) {
-        return em.createNamedQuery(Order.GET_ALL_BY_CLIENT_ID_AND_STATUS, Order.class)
-                .setParameter("clientId", clientId)
-                .setParameter("status", status)
                 .getResultList();
     }
 
