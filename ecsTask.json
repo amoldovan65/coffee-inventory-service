@@ -2,26 +2,26 @@
   "containerDefinitions": [
     {
       "essential": true,
-      "image": "083384386596.dkr.ecr.eu-central-1.amazonaws.com/coffee/inventory:latest",
+      "image": "402495470109.dkr.ecr.eu-north-1.amazonaws.com/project/inventory:latest",
       "secrets": [
         {
           "name": "DB_URL",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:083384386596:secret:inventory-db:url::"
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:402495470109:secret:inventory-db:url::"
         },
         {
           "name": "DB_USERNAME",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:083384386596:secret:inventory-db:username::"
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:402495470109:secret:inventory-db:username::"
         },
         {
           "name": "DB_PASSWORD",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:083384386596:secret:inventory-db:password::"
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:402495470109:secret:inventory-db:password::"
         }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
           "awslogs-group" : "/ecs/inventory",
-          "awslogs-region": "eu-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "ecs"
         }
       },
@@ -36,7 +36,7 @@
     }
   ],
   "cpu": "512",
-  "executionRoleArn": "arn:aws:iam::083384386596:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::402495470109:role/ecsTaskExecutionRole",
   "family": "inventory",
   "memory": "1024",
   "networkMode": "awsvpc",
