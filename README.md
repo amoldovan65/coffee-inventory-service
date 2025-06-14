@@ -1,18 +1,34 @@
 # inventory
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project correspond to the inventory microservice of the application. This service is responsible for managing all
+data related to inventory for all beans, such as price, available quantity etc. It also manages orders placed by clients,
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Running the application on local environment
 
-## Running the application in dev mode
+In order to be able to run this application on the local environment, there are a couple of configurations that need to
+be performed first.
 
-You can run your application in dev mode that enables live coding using:
+1. Run the docker-compose file from this project. It will spin up a container with the database required by the service.
+2. Connect to the database container on port 5732, with username "postgres" and password "pass". JDBC URL: jdbc:postgresql://localhost:5732/postgres
+3. Run the following SQL queries on the database:
+```postgresql
+CREATE SCHEMA inventory;
+CREATE ROLE inventory with LOGIN ENCRYPTED PASSWORD 'inventory';
+```
+4. Run the following command in order to create all the necessary tables of the database:
+```shell script
+./gradlew update
+```
+5. Run the sql script from the src/main/resources/database/loadData folder, and then execute the following sql query to populate the database with data:
+```postgresql
+CALL insert_data();
+```
 
+Now that all the necessary configurations have been performed, the application itself can be started in development mode with the following command:
 ```shell script
 ./gradlew quarkusDev
 ```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+The application will be reachable on port 9091.
 
 ## Packaging and running the application
 
@@ -22,41 +38,4 @@ The application can be packaged using:
 ./gradlew build
 ```
 
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./gradlew build -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./build/inventory-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+The artifacts created by the build step will be used when creating the Docker image using the Dockerfile from this project.
